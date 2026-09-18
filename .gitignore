@@ -1,0 +1,60 @@
+# Dependencies
+node_modules
+.pnpm
+
+# Build output
+dist
+build
+.next
+.nuxt
+.output
+
+# Environment files (never commit secrets)
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Generated
+prisma/generated
+prisma/migrations/*/steps.json
+src/**/*.js
+src/**/*.js.map
+
+# Test coverage
+coverage/
+
+# TypeScript
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# Cache
+.cache/
+.parcel-cache/
+.next-cache/
+
+# OS-specific
+.DS_Store

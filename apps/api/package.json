@@ -1,0 +1,37 @@
+{
+  "name": "task-management-api",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -b",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc -b",
+    "test:unit": "vitest run",
+    "test:integration": "vitest run --environment node",
+    "prisma": "prisma"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.18.0",
+    "argon2": "^0.45.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.0.1",
+    "express-rate-limit": "^8.1.0",
+    "multer": "^2.0.2",
+    "uuid": "^11.1.0",
+    "zod": "^3.25.74"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.3",
+    "@types/multer": "^2.0.0",
+    "@types/node": "^22.15.19",
+    "@types/uuid": "^10.0.0",
+    "prisma": "^6.18.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.4"
+  }
+}

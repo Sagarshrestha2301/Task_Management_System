@@ -1,0 +1,37 @@
+{
+  "name": "task-management-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 5173",
+    "build": "tsc -b && vite build",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc -b",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,css}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,css}\"",
+    "preview": "vite preview",
+    "test:unit": "vitest run",
+    "test:integration": "vitest run --environment jsdom"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.84.2",
+    "lucide-react": "^0.511.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-hook-form": "^7.56.4",
+    "react-router": "^7.6.3",
+    "tailwindcss": "^4.1.5",
+    "zod": "^3.25.74"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.5",
+    "@types/react": "^19.1.4",
+    "@types/react-dom": "^19.1.5",
+    "@vitejs/plugin-react": "^4.4.1",
+    "jsdom": "^26.1.0",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vitest": "^3.1.4"
+  }
+}
