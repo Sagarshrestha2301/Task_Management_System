@@ -11,6 +11,7 @@ import {
   Search,
   Plus,
   Bell,
+  ChevronDown,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
@@ -21,6 +22,7 @@ import {
   DropdownSeparator,
 } from "@/components/ui/Dropdown";
 import { Avatar, AvatarFallback } from "@/components/ui/Avatar";
+import { useProjects } from "@/hooks/useProjects";
 
 interface NavItem {
   label: string;
@@ -58,6 +60,12 @@ export function Sidebar({
   onClose: () => void;
 }) {
   const [collapsed, setCollapsed] = useState(false);
+  const { data: projectsData, isLoading } = useProjects();
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
+    null,
+  );
+
+  const projects = projectsData?.projects ?? [];
 
   return (
     <Sheet
@@ -117,27 +125,74 @@ export function Sidebar({
           ))}
         </nav>
 
-        <div className="border-t border-border pt-3">
-          <div className="px-3 py-2 text-xs font-medium text-text-muted uppercase tracking-wider">
-            {!collapsed && "Projects"}
-          </div>
-          <nav className="space-y-1" aria-label="Projects">
-            <a
-              href="/projects/new"
-              className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                "text-accent hover:bg-accent-soft",
-                collapsed && "justify-center",
+        {!collapsed && (
+          <div className="border-t border-border pt-3">
+            <div className="px-3 py-2 text-xs font-medium text-text-muted uppercase tracking-wider">
+              Projects
+            </div>
+            <nav className="space-y-1" aria-label="Projects">
+              <a
+                href="/projects/new"
+                className={cn(
+                  "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                  "text-accent hover:bg-accent-soft",
+                )}
+                onClick={onClose}
+              >
+                <span className="flex-shrink-0" aria-hidden="true">
+                  <Plus className="h-5 w-5" />
+                </span>
+                <span>New Project</span>
+              </a>
+              {isLoading ? (
+                <div className="px-3 py-2 h-10 animate-pulse">
+                  <div className="h-full w-full bg-surface-muted rounded animate-pulse" />
+                </div>
+              ) : projects.length === 0 ? (
+                <div className="px-3 py-2 text-sm text-text-muted text-center">
+                  No projects yet
+                </div>
+              ) : (
+                <Dropdown
+                  trigger={
+                    <button
+                      className={cn(
+                        "flex items-center gap-3 w-full px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                        "text-text-muted hover:bg-surface-muted hover:text-text",
+                        selectedProjectId && "bg-accent-soft text-accent",
+                      )}
+                    >
+                      <FolderKanban className="h-5 w-5 flex-shrink-0" />
+                      <span className="truncate flex-1">
+                        {selectedProjectId
+                          ? (projects.find((p) => p.id === selectedProjectId)
+                              ?.name ?? "Select project")
+                          : "Select project"}
+                      </span>
+                      <ChevronDown className="h-4 w-4 text-text-muted flex-shrink-0" />
+                    </button>
+                  }
+                  content={
+                    <>
+                      {projects.map((project) => (
+                        <DropdownItem
+                          key={project.id}
+                          onClick={() => {
+                            setSelectedProjectId(project.id);
+                            onClose();
+                          }}
+                        >
+                          {project.name}
+                        </DropdownItem>
+                      ))}
+                    </>
+                  }
+                  align="start"
+                />
               )}
-              onClick={onClose}
-            >
-              <span className="flex-shrink-0" aria-hidden="true">
-                <Plus className="h-5 w-5" />
-              </span>
-              {!collapsed && <span>New Project</span>}
-            </a>
-          </nav>
-        </div>
+            </nav>
+          </div>
+        )}
 
         <div className="mt-auto border-t border-border pt-3">
           <div className="px-3 py-2 text-xs font-medium text-text-muted uppercase tracking-wider">

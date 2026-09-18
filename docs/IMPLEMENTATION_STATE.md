@@ -2,19 +2,19 @@
 
 ## Current Phase
 
-Phase 2 — Authentication and account security (COMPLETED)
+Phase 3 — Projects and membership (COMPLETED)
 
 ## Current Milestone
 
-Full auth implementation (backend + frontend)
+Projects API and frontend implementation complete
 
 ## Current Task
 
-Phase 2 complete. Ready to start Phase 3.
+Phase 3 complete. Ready to start Phase 4.
 
 ## Last Verified
 
-2026-09-18 — Phase 2 complete, all checks passing
+2026-09-18 — Phase 3 complete, all checks passing
 
 ## Known Blockers
 
@@ -22,17 +22,18 @@ None
 
 ## Recent Files Changed
 
-Phase 2 auth implementation: Prisma schema, auth service, controller, routes, middleware, rate limiting, frontend auth hooks, AuthProvider, protected routes, login/register/forgot/reset password forms, settings page with change password
+Phase 3: Projects API (CRUD, archive, members, invitations) and frontend (list, create, detail, project switcher)
 
 ## Commands Actually Executed
 
-- `npx prisma migrate dev --name init` — Database schema created
-- `npx prisma generate` — Prisma client generated
-- Implemented auth module with register, login, logout, session, change-password, forgot/reset password
-- Added Argon2id password hashing
-- Implemented database-backed opaque sessions with HttpOnly cookies
-- Added rate limiting on auth endpoints
-- Frontend: TanStack Query auth hooks, AuthProvider, protected/public routes, login/register/forgot/reset password forms, settings page with change password
+- `npx prisma migrate dev --name add_owner_to_invitation` — Migration for invitation role
+- Implemented Projects API: create, list, get, update, archive, delete
+- Implemented Project members: list, add, remove, update role
+- Implemented Invitations: send, list, accept, revoke
+- Frontend: Projects list with create dialog, search, skeleton loading
+- Frontend: Project detail page
+- Frontend: Project switcher in sidebar with Dropdown
+- Frontend: useProjects hooks with TanStack Query
 - `npx tsc --noEmit` — TypeScript type checking passed (API and web)
 - `npx vitest run` — Unit tests passed (API and web)
 - `npm run build` — Build successful (API and web)
@@ -54,30 +55,22 @@ None
 
 ## Architectural Decisions
 
-- Database-backed opaque sessions (not JWT)
-- Argon2id for password hashing
-- HttpOnly, Secure (production), SameSite=Lax cookies
-- Generic error messages for enumeration resistance
-- Rate limiting: 10 req/15min for auth, 5 req/hour for password reset
+(Recorded in docs/decisions.md)
 
 ## Next Exact Task
 
-Start Phase 3: Projects and membership implementation
+Start Phase 4: Issues CRUD implementation
 
-## Phase 2 Checklist
+## Phase 3 Checklist
 
-- [x] Prisma schema for users, sessions, password_reset_tokens, audit_logs
-- [x] Run migrations
-- [x] Auth module: register, login, logout endpoints
-- [x] Database-backed opaque sessions with HttpOnly cookies
-- [x] Password hashing with Argon2id
-- [x] Session restoration, profile, change password
-- [x] Forgot/reset password flow with single-use expiring tokens
-- [x] Rate limiting on auth endpoints
-- [x] Frontend auth pages (login, register, forgot/reset password)
-- [x] Auth state management with TanStack Query
-- [x] Protected routes on frontend
-- [x] Session restoration on app load
-- [x] Settings page with change password
+- [x] Projects API: create, update, archive, list, get by ID
+- [x] Project members: list, add, remove, update role
+- [x] Invitations: send, accept, list, revoke
+- [x] Frontend: Projects list page with create dialog and search
+- [x] Frontend: Project detail page
+- [x] Frontend: Project switcher in sidebar
+- [x] Frontend: Members management placeholder (API ready)
+- [x] Frontend: Invitation flow (API ready)
+- [x] Authorization: project-level permissions enforced
 - [x] All checks pass
-- [x] Commit Phase 2 checkpoint
+- [x] Commit Phase 3 checkpoint

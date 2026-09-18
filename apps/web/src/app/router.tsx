@@ -8,7 +8,8 @@ import { ForgotPasswordForm } from "@/features/auth/ForgotPasswordForm";
 import { ResetPasswordForm } from "@/features/auth/ResetPasswordForm";
 import { ProtectedRoutes, PublicRoutes } from "@/app/routes";
 import { Dashboard } from "@/features/dashboard/Dashboard";
-import { Projects, ProjectDetail } from "@/features/projects/Projects";
+import { Projects } from "@/features/projects/Projects";
+import { ProjectDetail } from "@/features/projects/ProjectDetail";
 import { Settings } from "@/features/settings/Settings";
 import { ErrorPage } from "@/features/error/ErrorPage";
 

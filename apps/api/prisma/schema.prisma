@@ -13,6 +13,7 @@ enum ProjectRole {
 }
 
 enum InvitationRole {
+  OWNER
   MEMBER
 }
 
