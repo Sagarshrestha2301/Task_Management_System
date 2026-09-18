@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import { AppShell } from "@/components/layout";
 import { ToastProvider } from "@/components/ui";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AuthProvider } from "@/hooks/useAuthContext";
 import { LoginForm } from "@/features/auth/LoginForm";
 import { RegisterForm } from "@/features/auth/RegisterForm";
 import { ForgotPasswordForm } from "@/features/auth/ForgotPasswordForm";
@@ -13,6 +14,7 @@ import { ProjectDetail } from "@/features/projects/ProjectDetail";
 import { Settings } from "@/features/settings/Settings";
 import { ErrorPage } from "@/features/error/ErrorPage";
 import { IssueDetailRoute } from "@/features/issues/IssueDetailRoute";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -86,11 +88,17 @@ const router = createBrowserRouter([
   },
 ]);
 
+function AppRouter() {
+  return <RouterProvider router={router} />;
+}
+
 export function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ToastProvider>
-        <RouterProvider router={router} />
+        <AuthProvider>
+          <AppRouter />
+        </AuthProvider>
       </ToastProvider>
     </QueryClientProvider>
   );

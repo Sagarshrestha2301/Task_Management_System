@@ -8,6 +8,8 @@ export function useAttachments(issueId: string) {
     queryKey: ATTACHMENTS_KEY(issueId),
     queryFn: () => attachmentsApi.fetchAttachments(issueId),
     enabled: !!issueId,
+    retry: false,
+    throwOnError: false,
   });
 }
 

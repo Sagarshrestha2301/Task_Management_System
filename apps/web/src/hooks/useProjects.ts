@@ -14,6 +14,8 @@ export function useProjects() {
   return useQuery({
     queryKey: PROJECTS_KEY,
     queryFn: projectsApi.fetchProjects,
+    retry: false,
+    throwOnError: false,
   });
 }
 
@@ -22,6 +24,8 @@ export function useProject(projectId: string) {
     queryKey: PROJECT_KEY(projectId),
     queryFn: () => projectsApi.fetchProject(projectId),
     enabled: !!projectId,
+    retry: false,
+    throwOnError: false,
   });
 }
 
@@ -73,6 +77,8 @@ export function useProjectMembers(projectId: string) {
     queryKey: MEMBERS_KEY(projectId),
     queryFn: () => projectsApi.fetchProjectMembers(projectId),
     enabled: !!projectId,
+    retry: false,
+    throwOnError: false,
   });
 }
 
@@ -131,6 +137,8 @@ export function useInvitations(projectId: string) {
     queryKey: INVITATIONS_KEY(projectId),
     queryFn: () => projectsApi.fetchInvitations(projectId),
     enabled: !!projectId,
+    retry: false,
+    throwOnError: false,
   });
 }
 

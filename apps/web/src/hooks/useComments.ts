@@ -20,6 +20,8 @@ export function useComments(issueId: string) {
     },
     initialPageParam: 1,
     enabled: !!issueId,
+    retry: false,
+    throwOnError: false,
   });
 }
 

@@ -21,6 +21,8 @@ export function useIssues(
     queryFn: () => issuesApi.fetchIssues(projectId, params),
     enabled: !!projectId,
     placeholderData: (previous) => previous,
+    retry: false,
+    throwOnError: false,
   });
 }
 
@@ -29,6 +31,8 @@ export function useIssue(projectId: string, issueId: string) {
     queryKey: ISSUE_KEY(projectId, issueId),
     queryFn: () => issuesApi.fetchIssue(projectId, issueId),
     enabled: !!projectId && !!issueId,
+    retry: false,
+    throwOnError: false,
   });
 }
 
