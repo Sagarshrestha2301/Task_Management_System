@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import { requestLogger } from "./middleware/request-logger.js";
 import { errorHandler, notFoundHandler } from "./middleware/error-handler.js";
 import { createApiRouter } from "./modules/api.js";
@@ -11,6 +12,7 @@ const API_ORIGIN = process.env.API_ORIGIN || "http://localhost:3001";
 const APP_ORIGIN = process.env.APP_ORIGIN || "http://localhost:5173";
 
 app.use(express.json({ limit: "1mb" }));
+app.use(cookieParser());
 app.use(
   cors({
     origin: [APP_ORIGIN],
@@ -22,6 +24,9 @@ app.use(
 app.use(requestLogger);
 
 app.use(createApiRouter());
+
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

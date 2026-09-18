@@ -2,19 +2,19 @@
 
 ## Current Phase
 
-Phase 1 — Design system and application shell (IN PROGRESS)
+Phase 2 — Authentication and account security (IN PROGRESS)
 
 ## Current Milestone
 
-Design system tokens and application shell structure
+Auth endpoints and session management
 
 ## Current Task
 
-Implement design system tokens, app shell with sidebar, core UI primitives, and routing
+Auth module implemented: register, login, logout, session, profile, change password, forgot/reset password with rate limiting
 
 ## Last Verified
 
-2026-09-18 — Phase 0 complete, pushed to GitHub
+2026-09-18 — Phase 2 auth endpoints complete, all checks passing
 
 ## Known Blockers
 
@@ -22,12 +22,20 @@ None
 
 ## Recent Files Changed
 
-Phase 0 checkpoint committed (b27abf7)
+Phase 2 auth implementation: Prisma schema, auth service, controller, routes, middleware, rate limiting
 
 ## Commands Actually Executed
 
-- Phase 0 commands as recorded
-- `git push -u origin main` — Pushed to GitHub
+- `npx prisma migrate dev --name init` — Database schema created
+- `npx prisma generate` — Prisma client generated
+- Implemented auth module with register, login, logout, session, change-password, forgot/reset password
+- Added Argon2id password hashing
+- Implemented database-backed opaque sessions with HttpOnly cookies
+- Added rate limiting on auth endpoints
+- `npx tsc --noEmit` — TypeScript type checking passed (API and web)
+- `npx vitest run` — Unit tests passed (API and web)
+- `npm run format:check` — Prettier formatting verified
+- `docker compose exec -T postgres psql` — Database connectivity verified
 
 ## Tests Actually Passed
 
@@ -36,7 +44,7 @@ Phase 0 checkpoint committed (b27abf7)
 
 ## Known Issues
 
-- API `auditLog` property not found on PrismaClient (expected — no migrations run yet)
+None
 
 ## Blocked Items
 
@@ -44,22 +52,29 @@ None
 
 ## Architectural Decisions
 
-(Recorded in docs/decisions.md)
+- Database-backed opaque sessions (not JWT)
+- Argon2id for password hashing
+- HttpOnly, Secure (production), SameSite=Lax cookies
+- Generic error messages for enumeration resistance
+- Rate limiting: 10 req/15min for auth, 5 req/hour for password reset
 
 ## Next Exact Task
 
-Implement design system tokens in Tailwind config, create app shell with sidebar/project switcher, core UI primitives (Button, Input, Dialog, Sheet, Table, Badge), routing with React Router, and core routes (Dashboard, Projects, Issues)
+Frontend auth integration: TanStack Query auth state, login/register forms, protected routes
 
-## Phase 1 Checklist
+## Phase 2 Checklist
 
-- [ ] Design system tokens (colors, spacing, typography, radius) in Tailwind config
-- [ ] App shell with responsive sidebar, project switcher, navigation
-- [ ] Core UI primitives: Button, Input, Dialog, Sheet, Table, Badge
-- [ ] Routing structure with React Router (public + authenticated routes)
-- [ ] Dashboard route with recent projects/assigned work
-- [ ] Projects list and project detail routes
-- [ ] Issues board/list routes with URL-synchronized state
-- [ ] Loading/error/empty state components
-- [ ] Mobile/tablet/desktop responsive verification
-- [ ] All checks pass (lint, typecheck, tests)
-- [ ] Commit Phase 1 checkpoint
+- [x] Prisma schema for users, sessions, password_reset_tokens, audit_logs
+- [x] Run migrations
+- [x] Auth module: register, login, logout endpoints
+- [x] Database-backed opaque sessions with HttpOnly cookies
+- [x] Password hashing with Argon2id
+- [x] Session restoration, profile, change password
+- [x] Forgot/reset password flow with single-use expiring tokens
+- [x] Rate limiting on auth endpoints
+- [ ] Frontend auth pages (login, register, forgot/reset password)
+- [ ] Auth state management with TanStack Query
+- [ ] Protected routes on frontend
+- [ ] Auth integration tests
+- [ ] All checks pass
+- [ ] Commit Phase 2 checkpoint

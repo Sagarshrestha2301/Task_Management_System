@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { prisma } from "../../lib/prisma.js";
 
 export async function logAudit(entry: {
@@ -6,7 +7,7 @@ export async function logAudit(entry: {
   resourceId?: string;
   projectId?: string;
   actorId?: string;
-  metadata?: Record<string, unknown>;
+  metadata?: Prisma.InputJsonValue;
 }) {
   await prisma.auditLog.create({
     data: {
@@ -15,7 +16,7 @@ export async function logAudit(entry: {
       resourceId: entry.resourceId,
       projectId: entry.projectId,
       actorId: entry.actorId,
-      metadataJson: entry.metadata ?? {},
+      metadataJson: entry.metadata ?? Prisma.JsonNull,
     },
   });
 }

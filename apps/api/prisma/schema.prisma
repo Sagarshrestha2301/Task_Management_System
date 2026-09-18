@@ -6,3 +6,231 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
 }
+
+enum ProjectRole {
+  OWNER
+  MEMBER
+}
+
+enum InvitationRole {
+  MEMBER
+}
+
+enum IssueStatus {
+  TODO
+  IN_PROGRESS
+  IN_REVIEW
+  DONE
+}
+
+enum IssuePriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String
+  name          String
+  avatarUrl     String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  sessions            Session[]
+  passwordResetTokens PasswordResetToken[]
+  projectMembers      ProjectMember[]
+  createdProjects     Project[]         @relation("ProjectOwner")
+  createdInvitations  Invitation[]      @relation("InvitationCreator")
+  createdIssues       Issue[]           @relation("IssueCreator")
+  assignedIssues      Issue[]           @relation("IssueAssignee")
+  comments            Comment[]
+  attachments         Attachment[]
+  auditLogs           AuditLog[]
+
+  @@index([email])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  secretHash   String   @unique
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+  lastUsedAt   DateTime @default(now())
+  revokedAt    DateTime?
+  ipHash       String?
+  userAgent    String?
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Project {
+  id          String      @id @default(uuid())
+  name        String
+  description String?
+  ownerId     String
+  owner       User        @relation("ProjectOwner", fields: [ownerId], references: [id])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  archivedAt  DateTime?
+
+  members     ProjectMember[]
+  invitations Invitation[]
+  issues      Issue[]
+  labels      Label[]
+  auditLogs   AuditLog[]
+
+  @@index([ownerId])
+  @@index([archivedAt])
+}
+
+model ProjectMember {
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      ProjectRole
+  joinedAt  DateTime @default(now())
+
+  @@id([projectId, userId])
+}
+
+model Invitation {
+  id          String         @id @default(uuid())
+  projectId   String
+  project     Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  email       String
+  role        InvitationRole
+  secretHash  String         @unique
+  expiresAt   DateTime
+  acceptedAt  DateTime?
+  createdBy   String
+  creator     User           @relation("InvitationCreator", fields: [createdBy], references: [id])
+  createdAt   DateTime       @default(now())
+
+  @@index([projectId])
+  @@index([email])
+  @@index([expiresAt])
+}
+
+model Issue {
+  id           String        @id @default(uuid())
+  projectId    String
+  project      Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  issueNumber  Int
+  createdById  String
+  createdBy    User          @relation("IssueCreator", fields: [createdById], references: [id])
+  title        String
+  description  String?
+  status       IssueStatus   @default(TODO)
+  priority     IssuePriority @default(MEDIUM)
+  assigneeId   String?
+  assignee     User?         @relation("IssueAssignee", fields: [assigneeId], references: [id])
+  dueDate      DateTime?
+  position     Int           @default(0)
+  version      Int           @default(1)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  deletedAt    DateTime?
+
+  labels       IssueLabel[]
+  comments     Comment[]
+  attachments  Attachment[]
+  auditLogs    AuditLog[]
+
+  @@unique([projectId, issueNumber])
+  @@index([projectId, status, position])
+  @@index([projectId, updatedAt])
+  @@index([projectId, priority])
+  @@index([projectId, dueDate])
+  @@index([projectId, assigneeId])
+}
+
+model Label {
+  id        String   @id @default(uuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name      String
+  colorKey  String?
+  createdAt DateTime @default(now())
+
+  issues IssueLabel[]
+
+  @@unique([projectId, name])
+}
+
+model IssueLabel {
+  issueId  String
+  issue    Issue   @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  labelId  String
+  label    Label   @relation(fields: [labelId], references: [id], onDelete: Cascade)
+
+  @@id([issueId, labelId])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  issueId   String
+  issue     Issue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  body      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  @@index([issueId, createdAt])
+}
+
+model Attachment {
+  id           String   @id @default(uuid())
+  issueId      String
+  issue        Issue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  uploadedById String
+  uploadedBy   User     @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+  originalName String
+  storageKey   String   @unique
+  mimeType     String
+  byteSize     BigInt
+  createdAt    DateTime @default(now())
+  deletedAt    DateTime?
+}
+
+model AuditLog {
+  id            String   @id @default(uuid())
+  actorId       String?
+  actor         User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  action        String
+  resourceType  String
+  resourceId    String?
+  projectId     String?
+  project       Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  issueId       String?
+  issue         Issue?   @relation(fields: [issueId], references: [id], onDelete: SetNull)
+  metadataJson  Json
+  createdAt     DateTime @default(now())
+
+  @@index([actorId])
+  @@index([projectId])
+  @@index([issueId])
+  @@index([resourceType, resourceId])
+  @@index([createdAt])
+}
