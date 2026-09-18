@@ -2,19 +2,19 @@
 
 ## Current Phase
 
-Phase 2 — Authentication and account security (IN PROGRESS)
+Phase 2 — Authentication and account security (COMPLETED)
 
 ## Current Milestone
 
-Auth endpoints and session management
+Full auth implementation (backend + frontend)
 
 ## Current Task
 
-Auth module implemented: register, login, logout, session, profile, change password, forgot/reset password with rate limiting
+Phase 2 complete. Ready to start Phase 3.
 
 ## Last Verified
 
-2026-09-18 — Phase 2 auth endpoints complete, all checks passing
+2026-09-18 — Phase 2 complete, all checks passing
 
 ## Known Blockers
 
@@ -22,7 +22,7 @@ None
 
 ## Recent Files Changed
 
-Phase 2 auth implementation: Prisma schema, auth service, controller, routes, middleware, rate limiting
+Phase 2 auth implementation: Prisma schema, auth service, controller, routes, middleware, rate limiting, frontend auth hooks, AuthProvider, protected routes, login/register/forgot/reset password forms, settings page with change password
 
 ## Commands Actually Executed
 
@@ -32,8 +32,10 @@ Phase 2 auth implementation: Prisma schema, auth service, controller, routes, mi
 - Added Argon2id password hashing
 - Implemented database-backed opaque sessions with HttpOnly cookies
 - Added rate limiting on auth endpoints
+- Frontend: TanStack Query auth hooks, AuthProvider, protected/public routes, login/register/forgot/reset password forms, settings page with change password
 - `npx tsc --noEmit` — TypeScript type checking passed (API and web)
 - `npx vitest run` — Unit tests passed (API and web)
+- `npm run build` — Build successful (API and web)
 - `npm run format:check` — Prettier formatting verified
 - `docker compose exec -T postgres psql` — Database connectivity verified
 
@@ -60,7 +62,7 @@ None
 
 ## Next Exact Task
 
-Frontend auth integration: TanStack Query auth state, login/register forms, protected routes
+Start Phase 3: Projects and membership implementation
 
 ## Phase 2 Checklist
 
@@ -72,9 +74,10 @@ Frontend auth integration: TanStack Query auth state, login/register forms, prot
 - [x] Session restoration, profile, change password
 - [x] Forgot/reset password flow with single-use expiring tokens
 - [x] Rate limiting on auth endpoints
-- [ ] Frontend auth pages (login, register, forgot/reset password)
-- [ ] Auth state management with TanStack Query
-- [ ] Protected routes on frontend
-- [ ] Auth integration tests
-- [ ] All checks pass
-- [ ] Commit Phase 2 checkpoint
+- [x] Frontend auth pages (login, register, forgot/reset password)
+- [x] Auth state management with TanStack Query
+- [x] Protected routes on frontend
+- [x] Session restoration on app load
+- [x] Settings page with change password
+- [x] All checks pass
+- [x] Commit Phase 2 checkpoint
