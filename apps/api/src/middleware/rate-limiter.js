@@ -1,5 +1,4 @@
 import rateLimit from "express-rate-limit";
-
 export const authRateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10,
@@ -14,7 +13,6 @@ export const authRateLimiter = rateLimit({
   legacyHeaders: false,
   keyGenerator: (req) => req.ip ?? "unknown",
 });
-
 export const strictAuthRateLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
   max: 5,
@@ -29,7 +27,6 @@ export const strictAuthRateLimiter = rateLimit({
   legacyHeaders: false,
   keyGenerator: (req) => req.ip ?? "unknown",
 });
-
 export const apiRateLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 100,
@@ -44,7 +41,6 @@ export const apiRateLimiter = rateLimit({
   legacyHeaders: false,
   keyGenerator: (req) => req.ip ?? "unknown",
 });
-
 export const uploadRateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 20,
@@ -59,7 +55,6 @@ export const uploadRateLimiter = rateLimit({
   legacyHeaders: false,
   keyGenerator: (req) => req.ip ?? "unknown",
 });
-
 export const invitationRateLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
   max: 10,

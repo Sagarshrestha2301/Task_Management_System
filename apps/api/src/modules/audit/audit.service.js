@@ -1,14 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "../../lib/prisma.js";
-
-export async function logAudit(entry: {
-  action: string;
-  resourceType: string;
-  resourceId?: string;
-  projectId?: string;
-  actorId?: string;
-  metadata?: Prisma.InputJsonValue;
-}) {
+export async function logAudit(entry) {
   await prisma.auditLog.create({
     data: {
       action: entry.action,
@@ -20,7 +12,6 @@ export async function logAudit(entry: {
     },
   });
 }
-
 export const AuditActions = {
   AUTH_LOGIN_SUCCESS: "AUTH_LOGIN_SUCCESS",
   AUTH_LOGIN_FAILED: "AUTH_LOGIN_FAILED",
@@ -30,55 +21,36 @@ export const AuditActions = {
   AUTH_PASSWORD_RESET_REQUESTED: "AUTH_PASSWORD_RESET_REQUESTED",
   AUTH_PASSWORD_RESET_COMPLETED: "AUTH_PASSWORD_RESET_COMPLETED",
   AUTH_RATE_LIMIT_EXCEEDED: "AUTH_RATE_LIMIT_EXCEEDED",
-
   PROJECT_CREATED: "PROJECT_CREATED",
   PROJECT_UPDATED: "PROJECT_UPDATED",
   PROJECT_ARCHIVED: "PROJECT_ARCHIVED",
   PROJECT_DELETED: "PROJECT_DELETED",
-
   MEMBER_ADDED: "MEMBER_ADDED",
   MEMBER_REMOVED: "MEMBER_REMOVED",
   MEMBER_ROLE_UPDATED: "MEMBER_ROLE_UPDATED",
-
   INVITATION_SENT: "INVITATION_SENT",
   INVITATION_ACCEPTED: "INVITATION_ACCEPTED",
   INVITATION_REVOKED: "INVITATION_REVOKED",
   INVITATION_RATE_LIMIT_EXCEEDED: "INVITATION_RATE_LIMIT_EXCEEDED",
-
   ISSUE_CREATED: "ISSUE_CREATED",
   ISSUE_UPDATED: "ISSUE_UPDATED",
   ISSUE_DELETED: "ISSUE_DELETED",
   ISSUE_MOVED: "ISSUE_MOVED",
   LABELS_ADDED: "LABELS_ADDED",
   LABEL_REMOVED: "LABEL_REMOVED",
-
   COMMENT_CREATED: "COMMENT_CREATED",
   COMMENT_UPDATED: "COMMENT_UPDATED",
   COMMENT_DELETED: "COMMENT_DELETED",
-
   ATTACHMENT_UPLOADED: "ATTACHMENT_UPLOADED",
   ATTACHMENT_DOWNLOADED: "ATTACHMENT_DOWNLOADED",
   ATTACHMENT_DELETED: "ATTACHMENT_DELETED",
   ATTACHMENT_UPLOAD_REJECTED: "ATTACHMENT_UPLOAD_REJECTED",
   ATTACHMENT_RATE_LIMIT_EXCEEDED: "ATTACHMENT_RATE_LIMIT_EXCEEDED",
-
   PERMISSION_DENIED: "PERMISSION_DENIED",
   UNAUTHORIZED_ACCESS: "UNAUTHORIZED_ACCESS",
   RATE_LIMIT_EXCEEDED: "RATE_LIMIT_EXCEEDED",
-} as const;
-
-export type AuditAction = (typeof AuditActions)[keyof typeof AuditActions];
-
-export async function logSecurityEvent(params: {
-  action: AuditAction;
-  resourceType: string;
-  resourceId?: string;
-  projectId?: string;
-  actorId?: string;
-  ip?: string;
-  userAgent?: string;
-  metadata?: Record<string, unknown>;
-}) {
+};
+export async function logSecurityEvent(params) {
   await logAudit({
     action: params.action,
     resourceType: params.resourceType,

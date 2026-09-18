@@ -1,0 +1,45 @@
+export const SECURITY_CONSTANTS = {
+  CSP_POLICY: [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data: https:",
+    "connect-src 'self' https:",
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+  ].join("; "),
+
+  MAX_LOGIN_ATTEMPTS: 5,
+  LOCKOUT_DURATION: 15 * 60 * 1000,
+  SESSION_TIMEOUT: 30 * 24 * 60 * 60 * 1000,
+  PASSWORD_MIN_LENGTH: 12,
+  PASSWORD_MAX_LENGTH: 128,
+
+  ALLOWED_MIME_TYPES: [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "application/pdf",
+  ] as const,
+
+  MAX_FILE_SIZE: 10 * 1024 * 1024,
+  MAX_ATTACHMENTS_PER_ISSUE: 50,
+
+  RATE_LIMITS: {
+    AUTH: { windowMs: 15 * 60 * 1000, max: 10 },
+    STRICT_AUTH: { windowMs: 60 * 60 * 1000, max: 5 },
+    API: { windowMs: 60 * 1000, max: 100 },
+    UPLOAD: { windowMs: 15 * 60 * 1000, max: 20 },
+    INVITATION: { windowMs: 60 * 60 * 1000, max: 10 },
+  } as const,
+
+  SESSION_COOKIE: {
+    NAME: "session",
+    HTTP_ONLY: true,
+    SECURE: true,
+    SAME_SITE: "lax" as const,
+    PATH: "/",
+  } as const,
+} as const;

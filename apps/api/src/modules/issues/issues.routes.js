@@ -10,10 +10,8 @@ import {
   removeLabel,
   moveIssue,
 } from "./issues.controller.js";
-
 export function createIssuesRouter() {
   const router = Router();
-
   router.post("/", createIssue);
   router.get("/", listIssues);
   router.get("/:issueId", getIssue);
@@ -22,8 +20,6 @@ export function createIssuesRouter() {
   router.post("/:issueId/labels", addLabels);
   router.delete("/:issueId/labels", removeLabel);
   router.post("/:issueId/move", moveIssue);
-
   router.use("/:issueId/attachments", uploadRateLimiter);
-
   return router;
 }

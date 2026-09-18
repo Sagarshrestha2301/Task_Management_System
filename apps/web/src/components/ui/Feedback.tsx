@@ -6,6 +6,7 @@ export interface EmptyStateProps {
   description?: string;
   action?: ReactNode;
   icon?: ReactNode;
+  onClose?: () => void;
 }
 
 export function EmptyState({
@@ -13,6 +14,7 @@ export function EmptyState({
   description,
   action,
   icon,
+  onClose,
 }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
@@ -22,6 +24,16 @@ export function EmptyState({
         <p className="mt-2 text-sm text-text-muted max-w-sm">{description}</p>
       )}
       {action && <div className="mt-4">{action}</div>}
+      {onClose && (
+        <div className="mt-4">
+          <button
+            onClick={onClose}
+            className="text-sm text-accent hover:underline"
+          >
+            Close
+          </button>
+        </div>
+      )}
     </div>
   );
 }

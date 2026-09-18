@@ -25,3 +25,7 @@ export {
   SkeletonTableRow,
 } from "./Skeleton";
 export { EmptyState, LoadingState, ErrorState } from "./Feedback";
+// Add exports:
+export { CommentsThread } from "@/components/issues/CommentsThread";
+export { AttachmentsList } from "@/components/issues/AttachmentsList";
+export { IssueDetail } from "@/components/issues/IssueDetail";

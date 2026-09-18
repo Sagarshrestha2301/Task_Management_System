@@ -6,10 +6,8 @@ import { createIssuesRouter } from "./issues/issues.routes.js";
 import { createCommentsRouter } from "./comments/comments.routes.js";
 import { createAttachmentsRouter } from "./attachments/attachments.routes.js";
 import { withAuth } from "./auth/auth.middleware.js";
-
 export function createApiRouter() {
   const router = Router();
-
   router.use("/health", healthCheck);
   router.use("/health/ready", readinessCheck);
   router.use("/v1/auth", createAuthRouter());
@@ -24,6 +22,5 @@ export function createApiRouter() {
     "/v1/projects/:projectId/issues/:issueId/attachments",
     createAttachmentsRouter(),
   );
-
   return router;
 }
