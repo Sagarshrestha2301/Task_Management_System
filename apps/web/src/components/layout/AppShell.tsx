@@ -97,6 +97,7 @@ export function Sidebar({
         <nav
           className="flex-1 overflow-y-auto px-2 py-3 space-y-1"
           aria-label="Main navigation"
+          role="navigation"
         >
           <div className="px-3 py-2 text-xs font-medium text-text-muted uppercase tracking-wider">
             {!collapsed && "Main"}
@@ -161,6 +162,8 @@ export function Sidebar({
                         "text-text-muted hover:bg-surface-muted hover:text-text",
                         selectedProjectId && "bg-accent-soft text-accent",
                       )}
+                      aria-haspopup="true"
+                      aria-expanded={false}
                     >
                       <FolderKanban className="h-5 w-5 flex-shrink-0" />
                       <span className="truncate flex-1">
@@ -249,13 +252,17 @@ export function Header({
   showSearch = false,
 }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-30 h-14 bg-surface/80 backdrop-blur-sm border-b border-border flex items-center gap-4 px-4">
+    <header
+      className="sticky top-0 z-30 h-14 bg-surface/80 backdrop-blur-sm border-b border-border flex items-center gap-4 px-4"
+      role="banner"
+    >
       <Button
         variant="ghost"
         size="sm"
         onClick={onMenuClick}
         className="lg:hidden"
         aria-label="Open menu"
+        aria-controls="sidebar"
       >
         <Menu className="h-5 w-5" />
       </Button>
@@ -310,10 +317,21 @@ export function AppShell({ children }: AppShellProps) {
 
   return (
     <div className="min-h-screen bg-background flex">
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+      <aside id="sidebar" aria-label="Sidebar navigation" role="complementary">
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      </aside>
       <div className="flex-1 flex flex-col min-w-0 lg:pl-0">
         <Header onMenuClick={() => setSidebarOpen(true)} />
-        <main className="flex-1 p-4 lg:p-6 overflow-auto">{children}</main>
+        <main
+          id="main-content"
+          className="flex-1 p-4 lg:p-6 overflow-auto"
+          role="main"
+        >
+          {children}
+        </main>
       </div>
     </div>
   );

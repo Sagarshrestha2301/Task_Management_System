@@ -1,4 +1,4 @@
-import { Fragment, type ReactNode, useEffect, useRef } from "react";
+import { Fragment, type ReactNode, useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "./Button";
@@ -23,20 +23,59 @@ export function Sheet({
   className,
 }: SheetProps) {
   const contentRef = useRef<HTMLDivElement>(null);
+  const previousActiveElement = useRef<HTMLElement | null>(null);
+  const [focusableElements, setFocusableElements] = useState<HTMLElement[]>([]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onOpenChange(false);
+      if (e.key === "Tab") {
+        trapFocus(e);
+      }
     };
+
     if (open) {
+      previousActiveElement.current = document.activeElement as HTMLElement;
       document.addEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "hidden";
+
+      // Focus the first focusable element after render
+      setTimeout(() => {
+        const content = contentRef.current;
+        if (content) {
+          const elements = content.querySelectorAll<HTMLElement>(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+          );
+          setFocusableElements(Array.from(elements));
+          if (elements.length > 0) {
+            elements[0].focus();
+          }
+        }
+      }, 0);
     }
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "";
+      if (previousActiveElement.current) {
+        previousActiveElement.current.focus();
+      }
     };
   }, [open, onOpenChange]);
+
+  const trapFocus = (e: KeyboardEvent) => {
+    if (focusableElements.length === 0) return;
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    if (e.shiftKey && document.activeElement === firstElement) {
+      e.preventDefault();
+      lastElement.focus();
+    } else if (!e.shiftKey && document.activeElement === lastElement) {
+      e.preventDefault();
+      firstElement.focus();
+    }
+  };
 
   if (!open) return null;
 
@@ -63,6 +102,7 @@ export function Sheet({
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? "sheet-title" : undefined}
+        aria-describedby={description ? "sheet-description" : undefined}
       >
         {(title || description) && (
           <div className="flex items-start justify-between gap-4 p-4 border-b border-border">
@@ -76,7 +116,12 @@ export function Sheet({
                 </h2>
               )}
               {description && (
-                <p className="mt-1 text-sm text-text-muted">{description}</p>
+                <p
+                  id="sheet-description"
+                  className="mt-1 text-sm text-text-muted"
+                >
+                  {description}
+                </p>
               )}
             </div>
             <button

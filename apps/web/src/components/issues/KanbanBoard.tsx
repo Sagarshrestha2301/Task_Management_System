@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Plus, GripVertical, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
@@ -143,6 +143,7 @@ export function KanbanBoard({
 }: KanbanBoardProps) {
   const moveIssueMutation = useMoveIssue(projectId);
   const [isMoving, setIsMoving] = useState(false);
+  const [lastAnnouncement, setLastAnnouncement] = useState("");
 
   const moveIssue = useCallback(
     async (
@@ -156,12 +157,30 @@ export function KanbanBoard({
       setIsMoving(true);
       try {
         await moveIssueMutation.mutateAsync({ issueId, ...data });
+        const issue = issues.find((i) => i.id === issueId);
+        if (issue) {
+          const announcement = `Moved "${issue.title}" to ${STATUS_LABELS[data.status]}`;
+          setLastAnnouncement(announcement);
+        }
       } finally {
         setIsMoving(false);
       }
     },
-    [moveIssueMutation],
+    [moveIssueMutation, issues],
   );
+
+  // Announce changes to screen readers
+  useEffect(() => {
+    if (lastAnnouncement) {
+      const liveRegion = document.getElementById("kanban-live-region");
+      if (liveRegion) {
+        liveRegion.textContent = lastAnnouncement;
+        setTimeout(() => {
+          liveRegion.textContent = "";
+        }, 1000);
+      }
+    }
+  }, [lastAnnouncement]);
 
   if (isLoading) {
     return (
@@ -194,6 +213,13 @@ export function KanbanBoard({
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 h-[calc(100vh-200px)] min-h-[500px]">
+      <div
+        id="kanban-live-region"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      />
       {STATUSES.map((status) => (
         <KanbanColumn
           key={status}

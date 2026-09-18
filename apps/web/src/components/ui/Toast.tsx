@@ -35,6 +35,9 @@ export function Toast({
         "flex items-start gap-3 p-4 rounded-lg border shadow-lg animate-in slide-in-from-top duration-200",
         variants[variant],
       )}
+      role="alert"
+      aria-live="polite"
+      aria-atomic="true"
     >
       <div className="flex-1 min-w-0">
         <p className="font-medium text-text">{title}</p>
@@ -95,7 +98,13 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={{ toasts, addToast, removeToast }}>
       {children}
-      <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full">
+      <div
+        className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full"
+        role="region"
+        aria-label="Notifications"
+        aria-live="polite"
+        aria-atomic="true"
+      >
         {toasts.map((toast) => (
           <Toast key={toast.id} {...toast} />
         ))}

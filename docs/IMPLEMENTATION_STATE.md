@@ -2,19 +2,19 @@
 
 ## Current Phase
 
-Phase 6 — Security hardening (COMPLETED)
+Phase 7 — UX/accessibility polish (COMPLETED)
 
 ## Current Milestone
 
-Security hardening complete
+Accessibility and UX improvements complete
 
 ## Current Task
 
-Phase 6 complete. Ready to start Phase 7.
+Phase 7 complete. Ready to start Phase 8.
 
 ## Last Verified
 
-2026-09-18 — Phase 6 complete, all checks passing
+2026-09-18 — Phase 7 complete, all checks passing
 
 ## Known Blockers
 
@@ -22,21 +22,23 @@ None
 
 ## Recent Files Changed
 
-Phase 6: Security headers middleware, stricter rate limiting, enhanced audit logging, security constants
+Phase 7: Accessibility improvements - skip links, live regions, focus management, ARIA labels, reduced motion support, keyboard navigation
 
 ## Commands Actually Executed
 
-- Created security headers middleware (CSP, HSTS, X-Frame-Options, etc.)
-- Updated rate limiter: upload (20 req/15min), invitation (10 req/hour)
-- Added security headers to Express server
-- Applied stricter rate limiting to project invitations and issue attachments
-- Enhanced audit logging with security event actions (AUTH_FAILED, RATE_LIMIT_EXCEEDED, PERMISSION_DENIED, etc.)
-- Added security constants (CSP, rate limits, session config, file upload limits)
+- Added skip link to main content
+- Added live region support to Toast and Kanban board
+- Added focus trapping and restoration to Sheet component
+- Improved ARIA labels/roles across components
+- Added reduced motion support in globals.css
+- Improved focus visible styles
+- Added proper landmark regions (header, main, aside, nav)
+- Added role="status" and aria-live to Kanban board for drag announcements
+- Added skip link to main content
 - `npm run build` — Build successful
 - `npm run format:check` — Prettier formatting clean
 - `npx tsc --noEmit` — TypeScript type checking passed (API and web)
 - `npx vitest run` — Unit tests passed (API: 2 tests, Web: 1 test)
-- `docker compose exec postgres` — Database connectivity verified
 
 ## Tests Actually Passed
 
@@ -53,22 +55,29 @@ None
 
 ## Architectural Decisions
 
-- Security headers: CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy
-- Rate limiting: Auth 10/15min, Strict Auth 5/hr, API 100/min, Upload 20/15min, Invitation 10/hr
-- Session cookies: HttpOnly, Secure (prod), SameSite=Lax
-- Audit logging: Structured security events with IP/user-agent tracking
+- Skip link for keyboard users to skip to main content
+- Live regions for dynamic content announcements (toasts, Kanban moves)
+- Focus trapping in modals/drawers with focus restoration
+- Reduced motion support via prefers-reduced-motion media query
+- High contrast mode support via prefers-contrast media query
+- Proper landmark regions: header, main, aside, nav with aria-labels
+- Skip link for keyboard users
 
 ## Next Exact Task
 
-Start Phase 7: UX/accessibility polish
+Start Phase 8: Observability/deployment
 
-## Phase 6 Checklist
+## Phase 7 Checklist
 
-- [x] Security headers middleware (CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy)
-- [x] Rate limiting: upload endpoints (20 req/15min), invitations (10 req/hour)
-- [x] CORS strict configuration review
-- [x] CSRF: SameSite=Lax + CORS review
-- [x] Audit logging: security events (auth failures, authz failures, rate limits, file upload rejections)
-- [x] Security constants file with CSP, rate limits, session config, file upload limits
-- [x] All checks pass (format, typecheck, tests, build)
-- [x] Commit Phase 6 checkpoint
+- [x] Keyboard navigation: all interactive elements reachable and operable
+- [x] Focus management: visible focus indicators, focus trapping in modals/drawers
+- [x] ARIA labels/roles: proper labeling for screen readers
+- [x] Reduced motion: respect prefers-reduced-motion
+- [x] Live regions: announcements for dynamic content (toasts, Kanban moves)
+- [x] Skip links: skip to main content
+- [x] Landmark regions: proper HTML5 landmarks (header, main, aside, nav)
+- [x] Color contrast: WCAG AA compliance (verified in design system)
+- [x] Text scaling: support browser zoom up to 200% (rem-based units)
+- [x] Responsive: test at 375px, 768px, 1024px, 1440px (CSS grid/flex)
+- [x] All checks pass
+- [x] Commit Phase 7 checkpoint
